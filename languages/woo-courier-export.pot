@@ -1,0 +1,379 @@
+# Copyright (C) 2026 Saizul Amin
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Courier Export for WooCommerce 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/saizul/woo-courier-export/issues\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Domain: woo-courier-export\n"
+
+#. Plugin Name of the plugin
+#: woo-courier-export.php
+msgid "Courier Export for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: woo-courier-export.php
+msgid "https://github.com/saizul/woo-courier-export"
+msgstr ""
+
+#. Description of the plugin
+#: woo-courier-export.php
+msgid "Bulk-export WooCommerce orders to CSV files for Bangladeshi couriers: Steadfast, Pathao, RedX or your own column template."
+msgstr ""
+
+#. Author of the plugin
+#: woo-courier-export.php
+msgid "Saizul Amin"
+msgstr ""
+
+#. Author URI of the plugin
+#: woo-courier-export.php
+msgid "https://saizul.com"
+msgstr ""
+
+#. translators: %s: courier or template name.
+#: includes/Admin/BulkAction.php:69
+#, php-format
+msgid "Export to %s CSV"
+msgstr ""
+
+#: includes/Admin/BulkAction.php:90 includes/Admin/DownloadController.php:70
+msgid "You are not allowed to export orders."
+msgstr ""
+
+#: includes/Admin/DownloadController.php:78
+msgid "This export link has expired. Select the orders and run the bulk action again."
+msgstr ""
+
+#: includes/Admin/DownloadController.php:83
+msgid "Unknown export format."
+msgstr ""
+
+#. translators: 1: order id, 2: reason.
+#: includes/Admin/DownloadController.php:152
+#, php-format
+msgid "Order #%1$d skipped: %2$s."
+msgstr ""
+
+#. translators: 1: order id, 2: comma-separated problems.
+#: includes/Admin/DownloadController.php:164
+#, php-format
+msgid "Order #%1$d exported with warnings: %2$s."
+msgstr ""
+
+#. translators: %d: number of orders.
+#: includes/Admin/DownloadController.php:175
+#, php-format
+msgid "%d order exported."
+msgid_plural "%d orders exported."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Admin/SettingsTab.php:78 includes/Admin/SettingsTab.php:205
+msgid "Courier export"
+msgstr ""
+
+#. translators: %s: template error.
+#: includes/Admin/SettingsTab.php:112
+#, php-format
+msgid "Template not saved, the built-in columns are used instead. %s"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:137
+msgid "Cash on delivery"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:153
+msgid "Do not change"
+msgstr ""
+
+#. translators: 1: example line, 2: list of values, 3: list of filters.
+#: includes/Admin/SettingsTab.php:178
+#, php-format
+msgid "One column per line: %1$s. Leave a template empty to use the built-in columns. Values: %2$s. Filters: %3$s."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:206
+msgid "Select orders on the Orders screen and choose \"Export to ... CSV\" in the bulk actions. Couriers change their upload templates from time to time: compare the columns with the sample file in your courier panel before your first upload."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:211
+msgid "Formats in bulk actions"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:219
+msgid "Default format for WP-CLI"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:226
+msgid "CSV delimiter"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:228
+msgid "Comma (,)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:229
+msgid "Semicolon (;)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:230
+msgid "Tab"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:231
+msgid "Pipe (|)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:238
+msgid "UTF-8 byte order mark"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:239
+msgid "Add a BOM so Excel shows Bangla text correctly. Turn off if your courier rejects the file."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:249
+msgid "COD amount and weight"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:250
+msgid "COD amount = order total minus what has been paid already. Orders paid in full online export 0."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:255
+msgid "Cash on delivery methods"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:263
+msgid "Advance payment meta key"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:264
+msgid "Order meta key that stores an advance (for example a delivery charge paid by bKash). It is subtracted from the total. Leave empty if you do not take advances."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:270
+msgid "Unpaid orders with other methods"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:272
+msgid "Collect the balance on delivery"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:273
+msgid "Export 0"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:280
+msgid "Rounding"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:282
+msgid "Nearest taka"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:283
+msgid "Up"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:284
+msgid "Down"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:285
+msgid "No rounding (2 decimals)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:292
+msgid "Weight per item without weight (kg)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:302
+msgid "Minimum parcel weight (kg)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:316
+msgid "Export behaviour"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:321
+msgid "Invalid phone numbers"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:322
+msgid "Numbers are normalised to 01XXXXXXXXX. Orders whose number cannot be normalised are..."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:324
+msgid "Exported as typed, with a warning"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:325
+msgid "Skipped"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:332
+msgid "Mark exported orders"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:333
+msgid "Store the format and time on the order after each export."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:339
+msgid "Skip orders exported before"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:345
+msgid "Add an order note"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:351
+msgid "Change status after export"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:362
+msgid "Courier accounts"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:363
+msgid "Values available to templates as {store.*}."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:368
+msgid "Pathao store id"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:374
+msgid "Pathao delivery type"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:376
+msgid "Normal delivery (48)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:377
+msgid "On-demand delivery (12)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:384
+msgid "Pathao item type"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:386
+msgid "Parcel (2)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:387
+msgid "Document (1)"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:394
+msgid "RedX pickup store id"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:404
+msgid "District and area mapping"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:405
+msgid "One mapping per line: \"store value => courier value\". The district map is matched against the state code (BD-13), state name and city; the area map against the city field. Unmapped Bangladeshi states are converted to district names automatically."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:410
+msgid "District map"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:418
+msgid "Area map"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:430
+msgid "Column templates"
+msgstr ""
+
+#. translators: %s: courier or template name.
+#: includes/Admin/SettingsTab.php:440
+#, php-format
+msgid "%s columns"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:454
+msgid "Advanced"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:459
+msgid "Delete settings on uninstall"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:460
+msgid "Remove this plugin's settings when it is deleted. Export markers on orders are kept."
+msgstr ""
+
+#: includes/ExportService.php:61
+msgid "Steadfast"
+msgstr ""
+
+#: includes/ExportService.php:62
+msgid "Pathao"
+msgstr ""
+
+#: includes/ExportService.php:63
+msgid "RedX"
+msgstr ""
+
+#: includes/ExportService.php:64
+msgid "Generic template"
+msgstr ""
+
+#. translators: %s: courier or template name.
+#: includes/ExportService.php:212
+#, php-format
+msgid "Exported to a %s CSV file."
+msgstr ""
+
+#: includes/ExportService.php:262
+msgid "invalid phone number"
+msgstr ""
+
+#: includes/ExportService.php:263
+msgid "already exported"
+msgstr ""
+
+#: includes/ExportService.php:264
+msgid "excluded by a filter"
+msgstr ""
+
+#: includes/ExportService.php:265
+msgid "missing address"
+msgstr ""
+
+#: includes/ExportService.php:266
+msgid "missing name"
+msgstr ""
+
+#: includes/ExportService.php:267
+msgid "district not found"
+msgstr ""
+
+#: includes/ExportService.php:268
+msgid "zero weight"
+msgstr ""
+
+#: includes/Plugin.php:132
+msgid "Settings"
+msgstr ""
+
+#: includes/Plugin.php:143
+msgid "Courier Export for WooCommerce needs WooCommerce to be installed and active."
+msgstr ""
+
+#: woo-courier-export.php:29
+msgid "Courier Export for WooCommerce requires PHP 7.4 or newer."
+msgstr ""
