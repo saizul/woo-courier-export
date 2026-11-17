@@ -42,32 +42,38 @@ msgstr ""
 msgid "Export to %s CSV"
 msgstr ""
 
-#: includes/Admin/BulkAction.php:90 includes/Admin/DownloadController.php:70
+#: includes/Admin/BulkAction.php:90 includes/Admin/DownloadController.php:71
 msgid "You are not allowed to export orders."
 msgstr ""
 
-#: includes/Admin/DownloadController.php:78
+#: includes/Admin/DownloadController.php:79
 msgid "This export link has expired. Select the orders and run the bulk action again."
 msgstr ""
 
-#: includes/Admin/DownloadController.php:83
+#: includes/Admin/DownloadController.php:84
 msgid "Unknown export format."
 msgstr ""
 
+#. translators: 1: order id, 2: id of the earlier order for the same recipient.
+#: includes/Admin/DownloadController.php:157
+#, php-format
+msgid "Order #%1$d skipped: same recipient as order #%2$d."
+msgstr ""
+
 #. translators: 1: order id, 2: reason.
-#: includes/Admin/DownloadController.php:152
+#: includes/Admin/DownloadController.php:165
 #, php-format
 msgid "Order #%1$d skipped: %2$s."
 msgstr ""
 
 #. translators: 1: order id, 2: comma-separated problems.
-#: includes/Admin/DownloadController.php:164
+#: includes/Admin/DownloadController.php:177
 #, php-format
 msgid "Order #%1$d exported with warnings: %2$s."
 msgstr ""
 
 #. translators: %d: number of orders.
-#: includes/Admin/DownloadController.php:175
+#: includes/Admin/DownloadController.php:188
 #, php-format
 msgid "%d order exported."
 msgid_plural "%d orders exported."
@@ -219,100 +225,132 @@ msgid "Skipped"
 msgstr ""
 
 #: includes/Admin/SettingsTab.php:332
-msgid "Mark exported orders"
+msgid "Orders for the same recipient"
 msgstr ""
 
 #: includes/Admin/SettingsTab.php:333
+msgid "When several selected orders go to the same customer (repeat clicks, test or fake orders), later ones are..."
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:335
+msgid "Exported, and all of them flagged with a warning"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:336
+msgid "Skipped; only the first order is exported"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:337
+msgid "Exported without a warning"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:344
+msgid "Same recipient means"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:346
+msgid "Same phone number"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:347
+msgid "Same phone number and delivery address"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:354
+msgid "Mark exported orders"
+msgstr ""
+
+#: includes/Admin/SettingsTab.php:355
 msgid "Store the format and time on the order after each export."
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:339
+#: includes/Admin/SettingsTab.php:361
 msgid "Skip orders exported before"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:345
+#: includes/Admin/SettingsTab.php:367
 msgid "Add an order note"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:351
+#: includes/Admin/SettingsTab.php:373
 msgid "Change status after export"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:362
+#: includes/Admin/SettingsTab.php:384
 msgid "Courier accounts"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:363
+#: includes/Admin/SettingsTab.php:385
 msgid "Values available to templates as {store.*}."
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:368
+#: includes/Admin/SettingsTab.php:390
 msgid "Pathao store id"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:374
+#: includes/Admin/SettingsTab.php:396
 msgid "Pathao delivery type"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:376
+#: includes/Admin/SettingsTab.php:398
 msgid "Normal delivery (48)"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:377
+#: includes/Admin/SettingsTab.php:399
 msgid "On-demand delivery (12)"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:384
+#: includes/Admin/SettingsTab.php:406
 msgid "Pathao item type"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:386
+#: includes/Admin/SettingsTab.php:408
 msgid "Parcel (2)"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:387
+#: includes/Admin/SettingsTab.php:409
 msgid "Document (1)"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:394
+#: includes/Admin/SettingsTab.php:416
 msgid "RedX pickup store id"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:404
+#: includes/Admin/SettingsTab.php:426
 msgid "District and area mapping"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:405
+#: includes/Admin/SettingsTab.php:427
 msgid "One mapping per line: \"store value => courier value\". The district map is matched against the state code (BD-13), state name and city; the area map against the city field. Unmapped Bangladeshi states are converted to district names automatically."
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:410
+#: includes/Admin/SettingsTab.php:432
 msgid "District map"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:418
+#: includes/Admin/SettingsTab.php:440
 msgid "Area map"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:430
+#: includes/Admin/SettingsTab.php:452
 msgid "Column templates"
 msgstr ""
 
 #. translators: %s: courier or template name.
-#: includes/Admin/SettingsTab.php:440
+#: includes/Admin/SettingsTab.php:462
 #, php-format
 msgid "%s columns"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:454
+#: includes/Admin/SettingsTab.php:476
 msgid "Advanced"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:459
+#: includes/Admin/SettingsTab.php:481
 msgid "Delete settings on uninstall"
 msgstr ""
 
-#: includes/Admin/SettingsTab.php:460
+#: includes/Admin/SettingsTab.php:482
 msgid "Remove this plugin's settings when it is deleted. Export markers on orders are kept."
 msgstr ""
 
@@ -333,36 +371,40 @@ msgid "Generic template"
 msgstr ""
 
 #. translators: %s: courier or template name.
-#: includes/ExportService.php:212
+#: includes/ExportService.php:213
 #, php-format
 msgid "Exported to a %s CSV file."
 msgstr ""
 
-#: includes/ExportService.php:262
+#: includes/ExportService.php:263
 msgid "invalid phone number"
 msgstr ""
 
-#: includes/ExportService.php:263
+#: includes/ExportService.php:264
 msgid "already exported"
 msgstr ""
 
-#: includes/ExportService.php:264
+#: includes/ExportService.php:265
 msgid "excluded by a filter"
 msgstr ""
 
-#: includes/ExportService.php:265
-msgid "missing address"
-msgstr ""
-
 #: includes/ExportService.php:266
-msgid "missing name"
+msgid "another order in this export goes to the same recipient"
 msgstr ""
 
 #: includes/ExportService.php:267
-msgid "district not found"
+msgid "missing address"
 msgstr ""
 
 #: includes/ExportService.php:268
+msgid "missing name"
+msgstr ""
+
+#: includes/ExportService.php:269
+msgid "district not found"
+msgstr ""
+
+#: includes/ExportService.php:270
 msgid "zero weight"
 msgstr ""
 

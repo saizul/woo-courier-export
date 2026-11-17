@@ -51,9 +51,11 @@ final class ExporterFactory {
 
 		return ExportOptions::from_array(
 			array(
-				'invalid_phone' => $settings['invalid_phone'],
-				'skip_exported' => $settings['skip_exported'],
-				'store'         => array(
+				'invalid_phone'   => $settings['invalid_phone'],
+				'duplicates'      => $settings['duplicate_orders'],
+				'duplicate_match' => $settings['duplicate_match'],
+				'skip_exported'   => $settings['skip_exported'],
+				'store'           => array(
 					'pathao_store_id'      => $settings['pathao_store_id'],
 					'pathao_delivery_type' => $settings['pathao_delivery_type'],
 					'pathao_item_type'     => $settings['pathao_item_type'],

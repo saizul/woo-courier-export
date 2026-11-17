@@ -120,6 +120,7 @@ final class ExportServiceTest extends WpTestCase {
 		$labels = ExportService::reason_labels();
 		$this->assertArrayHasKey( 'invalid_phone', $labels );
 		$this->assertArrayHasKey( 'no_district', $labels );
+		$this->assertArrayHasKey( 'duplicate', $labels );
 	}
 
 	public function test_settings_reads_and_sanitises_option(): void {

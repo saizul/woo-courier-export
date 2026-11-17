@@ -93,6 +93,23 @@ final class AdminTest extends WpTestCase {
 		$this->assertSame( '', ob_get_clean() );
 	}
 
+	public function test_notice_names_the_first_order_for_duplicates(): void {
+		WpStubs::$transients['woo_courier_export_notice_1'] = array(
+			'count'      => 2,
+			'skipped'    => array( 12 => 'duplicate' ),
+			'warnings'   => array( 13 => array( 'duplicate' ) ),
+			'duplicates' => array(
+				12 => 10,
+				13 => 10,
+			),
+		);
+		ob_start();
+		( new DownloadController( $this->service() ) )->notice();
+		$html = (string) ob_get_clean();
+		$this->assertStringContainsString( 'Order #12 skipped: same recipient as order #10.', $html );
+		$this->assertStringContainsString( 'Order #13 exported with warnings: another order in this export goes to the same recipient.', $html );
+	}
+
 	public function test_notice_escapes_output(): void {
 		WpStubs::$transients['woo_courier_export_notice_1'] = array(
 			'count'    => 1,

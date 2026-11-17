@@ -39,6 +39,11 @@ Plugin slug: `woo-courier-export` - display name: *Courier Export for WooCommerc
 - **Safe template language**: `{recipient.name|upper|truncate:60}`,
   `{cod_amount|int}`, `{order.date|date:d/m/Y}`, 19 filters, no code execution, errors
   shown when you save the settings.
+- **Duplicate recipient guard**: when several selected orders go to the same
+  customer (a double-clicked checkout, test or fake orders), they are flagged in the
+  export summary, or only the first one is exported. Phone numbers are compared after
+  normalisation, so `+880 1711-234567` and `01711234567` match; you can also require
+  the same delivery address. `{recipient.duplicate_of}` names the first order.
 - **After export**: mark orders as exported, add an order note, move them to a status,
   skip already exported orders next time. A summary of skipped orders and warnings is
   shown after the download.
@@ -47,7 +52,7 @@ Plugin slug: `woo-courier-export` - display name: *Courier Export for WooCommerc
   CRLF line endings, formula-injection protection.
 - **HPOS compatible**: compatibility is declared and orders are read and written only
   through `wc_get_order()`, `wc_get_orders()` and CRUD methods.
-- **Extensible**: 15 filters and 4 actions, and a WordPress-free core you can reuse.
+- **Extensible**: 16 filters and 4 actions, and a WordPress-free core you can reuse.
 - **Translatable**: text domain `woo-courier-export`, `.pot` file included.
 
 ## About the courier column names
@@ -121,6 +126,9 @@ wp courier-export export pathao --ids=1201,1202,1203 --no-mark
 # Check what would happen
 wp courier-export export redx --status=processing,on-hold --skip-exported --dry-run
 
+# Export only the first order per customer, whatever the setting says
+wp courier-export export steadfast --status=processing --duplicates=skip
+
 # Formats and their columns
 wp courier-export formats --format=json
 
@@ -130,7 +138,8 @@ wp courier-export phone "+880 1711-234567" 1811234567 "০১৯১১২৩৪�
 
 `export` options: `[<format>]` (defaults to the *Default format* setting), `--ids`,
 `--status` (default `processing`), `--after`, `--before` (YYYY-MM-DD), `--limit`
-(default 500), `--output`, `--skip-exported`, `--[no-]mark`, `--dry-run`. Orders are
+(default 500), `--output`, `--skip-exported`, `--duplicates=<warn|skip|allow>`
+(defaults to the setting), `--[no-]mark`, `--dry-run`. Orders are
 loaded with `wc_get_orders()`.
 
 ## Configuration
@@ -151,6 +160,8 @@ loaded with `wc_get_orders()`.
 | Weight per item without weight | 0.5 kg | |
 | Minimum parcel weight | 0.5 kg | |
 | Invalid phone numbers | export with warning | or skip the order |
+| Orders for the same recipient | export with warning | or skip all but the first, or export silently |
+| Same recipient means | same phone | or same phone and delivery address |
 | Mark exported orders | on | stores `_woo_courier_export_exported` (format) and `_exported_at` |
 | Skip orders exported before | off | |
 | Add an order note | on | |
@@ -182,6 +193,34 @@ with the `woo_courier_export_cod_amount` filter.
 4. The state name as typed, then the city.
 
 The area is the city field after your area map.
+
+### Duplicate recipients
+
+Within one export, orders are grouped by recipient:
+
+- **Same phone** (default): the normalised `01XXXXXXXXX` number. Numbers that
+  cannot be normalised are compared by their digits (at least 6); orders without a
+  usable number are never treated as duplicates.
+- **Same phone and delivery address**: the phone plus the address (with area and
+  district), compared without case, punctuation or extra spaces, so
+  `House 12, Road 5` and `house 12 road-5` match.
+
+| Setting | Effect |
+| ------- | ------ |
+| Export with warning (default) | every order of the group is exported; the first and the later ones get a "same recipient" warning |
+| Skip all but the first | later orders are skipped with "same recipient as order #N" |
+| Export silently | no warnings; `{recipient.duplicate_of}` still works |
+
+Orders skipped for another reason (already exported, invalid phone, filtered) do
+not start a group. Later orders of a group get `{recipient.duplicate_of}` set to
+the first order's number, for example
+`Note = {order.note|single}{recipient.duplicate_of|prefix:" / Same customer as #"}`.
+Change the comparison, or leave an order out of it by returning `''`, with the
+`woo_courier_export_duplicate_key` filter. `ExportResult::$duplicates` maps every
+later order id to the first one and `duplicate_groups()` lists the groups.
+
+The check only looks at the orders in the current export, not at orders exported
+earlier; use *Skip orders exported before* for that.
 
 ### Column templates
 
@@ -215,6 +254,7 @@ Instructions = Fragile. {order.note|single|default:"No note"}
 | `recipient.address`, `recipient.address_with_area` | lines + city; plus area and district |
 | `recipient.address_1`, `recipient.address_2`, `recipient.city`, `recipient.postcode`, `recipient.country`, `recipient.state` | raw address parts |
 | `recipient.district`, `recipient.area`, `recipient.area_or_district` | after mapping |
+| `recipient.duplicate_of` | number of the first order in this export for the same recipient, empty otherwise |
 | `cod_amount`, `weight_kg`, `weight_g` | calculated |
 | `store.pathao_store_id`, `store.pathao_delivery_type`, `store.pathao_item_type`, `store.redx_pickup_store_id` | settings |
 | `meta.*` | `_woo_courier_export_exported` and anything you add with `woo_courier_export_order_data` |
@@ -324,6 +364,7 @@ Filters:
 | `woo_courier_export_district` | `string $district, OrderData $order, string $format` | district value |
 | `woo_courier_export_area` | `string $area, OrderData $order, string $format` | area value |
 | `woo_courier_export_context` | `array $context, OrderData $order, string $format` | all template values |
+| `woo_courier_export_duplicate_key` | `string $key, OrderData $order, array $context, string $format` | recipient key for duplicate detection; `''` leaves the order out |
 | `woo_courier_export_include_order` | `bool $include, OrderData $order, string $format` | skip orders |
 | `woo_courier_export_row` | `string[] $row, OrderData $order, string $format, array $context` | final row |
 | `woo_courier_export_csv_options` | `array $options` | `delimiter`, `bom` |

@@ -6,6 +6,25 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Duplicate recipient guard: orders in one export that go to the same customer
+  (same normalised phone number, or phone and delivery address) are flagged with a
+  `duplicate` warning, or skipped after the first with the new "Orders for the same
+  recipient" setting (`warn`, `skip`, `allow`) and "Same recipient means" setting.
+- `{recipient.duplicate_of}` template value with the first order's number.
+- `woo_courier_export_duplicate_key` filter, `ExportResult::$duplicates` and
+  `ExportResult::duplicate_groups()`.
+- `--duplicates=<warn|skip|allow>` option for `wp courier-export export`.
+- The export summary names the first order when a duplicate is skipped.
+- `CODE_OF_CONDUCT.md`, issue templates and a pull request template.
+
+### Changed
+
+- Orders sharing a recipient now get a `duplicate` warning by default. Choose
+  "Exported without a warning" to keep the previous behaviour.
+- A warning code is recorded at most once per order.
+
 ## [0.1.0] - 2026-11-12
 
 ### Added

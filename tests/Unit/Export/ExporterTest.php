@@ -138,6 +138,7 @@ final class ExporterTest extends TestCase {
 		$order  = Orders::cod(
 			array(
 				'id'        => 2,
+				'phone'     => '01911234567',
 				'name'      => '',
 				'address_1' => '',
 				'address_2' => '',

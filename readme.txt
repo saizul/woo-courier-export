@@ -25,6 +25,7 @@ Select orders and choose "Export to Steadfast CSV", "Export to Pathao CSV", "Exp
 * District names from WooCommerce states (BD-13 becomes Dhaka), old spellings recognised (Chittagong, Comilla, Jessore, Bogra...), plus your own district and area maps.
 * Parcel weight from product weights in any unit, with a default per item and a minimum weight. RedX gets grams.
 * Exported orders can be marked, noted and moved to another status, and skipped next time.
+* Repeat orders for the same customer in one export (same phone number, optionally the same address) are flagged with a warning, or only the first one is exported, so a courier does not pick up two parcels for one double-clicked checkout.
 * A summary of skipped orders and warnings after each export.
 
 **Your own columns**
@@ -43,7 +44,7 @@ The default columns follow the field names of each courier's public merchant API
 **For developers**
 
 * WP-CLI: `wp courier-export export steadfast --status=processing --output=orders.csv`, `wp courier-export formats`, `wp courier-export phone <number>`.
-* 15 filters and 4 actions, documented in the README on GitHub.
+* 16 filters and 4 actions, documented in the README on GitHub.
 * A WordPress-free, unit-tested core.
 
 Development happens on GitHub: https://github.com/saizul/woo-courier-export
@@ -72,6 +73,10 @@ For cash-on-delivery methods it is the order total minus the advance stored in t
 = Pathao needs city and zone ids. =
 
 Use the district and area maps in the settings ("Dhaka => 1"), or the `woo_courier_export_district` and `woo_courier_export_area` filters.
+
+= A customer placed the same order twice. Will both be shipped? =
+
+By default both orders are exported and flagged with a "same recipient" warning in the export summary. Set "Orders for the same recipient" to "Skipped" to export only the first one, or use `{recipient.duplicate_of}` in a column template to tell the courier which order it belongs to.
 
 = Is it compatible with HPOS? =
 

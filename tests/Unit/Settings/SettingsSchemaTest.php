@@ -45,6 +45,26 @@ final class SettingsSchemaTest extends TestCase {
 		$this->assertSame( '_advance_payment', $out['paid_meta_key'] );
 	}
 
+	public function test_duplicate_settings(): void {
+		$out = SettingsSchema::sanitize(
+			array(
+				'duplicate_orders' => 'skip',
+				'duplicate_match'  => 'phone_address',
+			)
+		);
+		$this->assertSame( 'skip', $out['duplicate_orders'] );
+		$this->assertSame( 'phone_address', $out['duplicate_match'] );
+
+		$out = SettingsSchema::sanitize(
+			array(
+				'duplicate_orders' => 'merge',
+				'duplicate_match'  => array( 'phone' ),
+			)
+		);
+		$this->assertSame( 'warn', $out['duplicate_orders'] );
+		$this->assertSame( 'phone', $out['duplicate_match'] );
+	}
+
 	public function test_invalid_values_fall_back(): void {
 		$out = SettingsSchema::sanitize(
 			array(
