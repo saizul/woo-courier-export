@@ -80,6 +80,15 @@ final class ExportCommand {
 	 * [--skip-exported]
 	 * : Skip orders that were exported before.
 	 *
+	 * [--duplicates=<mode>]
+	 * : Orders for the same recipient as an earlier order in this export (default: the setting).
+	 * ---
+	 * options:
+	 *   - warn
+	 *   - skip
+	 *   - allow
+	 * ---
+	 *
 	 * [--[no-]mark]
 	 * : Mark exported orders (default: the "Mark exported orders" setting).
 	 *
@@ -137,7 +146,16 @@ final class ExportCommand {
 			);
 		}
 
-		$result = $this->service->export( $orders, $format, $mark );
+		$overrides = array();
+		if ( isset( $assoc_args['duplicates'] ) ) {
+			$mode = (string) $assoc_args['duplicates'];
+			if ( ! in_array( $mode, array( 'warn', 'skip', 'allow' ), true ) ) {
+				WP_CLI::error( sprintf( 'Unknown --duplicates value "%s". Use warn, skip or allow.', $mode ) );
+			}
+			$overrides['duplicate_orders'] = $mode;
+		}
+
+		$result = $this->service->export( $orders, $format, $mark, $overrides );
 
 		if ( ! $dry_run ) {
 			$csv = $this->service->writer()->to_string( $result->headers, $result->rows );
@@ -153,6 +171,9 @@ final class ExportCommand {
 		}
 
 		foreach ( $result->skipped as $id => $reason ) {
+			if ( isset( $result->duplicates[ $id ] ) ) {
+				$reason .= sprintf( ' (same recipient as order %d)', $result->duplicates[ $id ] );
+			}
 			WP_CLI::warning( sprintf( 'Order %d skipped: %s', $id, $reason ) );
 		}
 		foreach ( $result->warnings as $id => $codes ) {

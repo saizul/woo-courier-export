@@ -166,12 +166,13 @@ final class ExportService {
 	 * @param WC_Order[] $orders    Orders.
 	 * @param string     $format_id Format id.
 	 * @param bool|null  $mark      Mark orders as exported (null: use the setting).
+	 * @param array      $overrides Settings to change for this export only (for example `duplicate_orders`).
 	 * @return ExportResult
 	 */
-	public function export( array $orders, string $format_id, ?bool $mark = null ): ExportResult {
+	public function export( array $orders, string $format_id, ?bool $mark = null, array $overrides = array() ): ExportResult {
 		$format  = $this->formats()->get( $format_id );
 		$mapper  = $this->mapper();
-		$options = ExporterFactory::options( $this->settings->all() );
+		$options = ExporterFactory::options( array_merge( $this->settings->all(), $overrides ) );
 		$by_id   = array();
 		$data    = array();
 		foreach ( $orders as $order ) {
@@ -262,6 +263,7 @@ final class ExportService {
 			Exporter::SKIP_INVALID_PHONE   => __( 'invalid phone number', 'woo-courier-export' ),
 			Exporter::SKIP_EXPORTED        => __( 'already exported', 'woo-courier-export' ),
 			Exporter::SKIP_FILTERED        => __( 'excluded by a filter', 'woo-courier-export' ),
+			Exporter::SKIP_DUPLICATE       => __( 'another order in this export goes to the same recipient', 'woo-courier-export' ),
 			Exporter::WARN_MISSING_ADDRESS => __( 'missing address', 'woo-courier-export' ),
 			Exporter::WARN_MISSING_NAME    => __( 'missing name', 'woo-courier-export' ),
 			Exporter::WARN_NO_DISTRICT     => __( 'district not found', 'woo-courier-export' ),

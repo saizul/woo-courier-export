@@ -168,7 +168,7 @@ final class SettingsTab {
 			. 'order.payment_method, order.payment_method_title, order.note, order.email, order.item_count, order.item_summary, order.items, '
 			. 'recipient.name, recipient.phone, recipient.phone_intl, recipient.phone_raw, recipient.alt_phone, recipient.address, '
 			. 'recipient.address_with_area, recipient.address_1, recipient.address_2, recipient.city, recipient.area, recipient.district, '
-			. 'recipient.area_or_district, recipient.postcode, cod_amount, weight_kg, weight_g, store.pathao_store_id, '
+			. 'recipient.area_or_district, recipient.postcode, recipient.duplicate_of, cod_amount, weight_kg, weight_g, store.pathao_store_id, '
 			. 'store.redx_pickup_store_id, meta.*';
 		$filters = 'upper, lower, title, trim, single, truncate:N, number:DECIMALS, int, default:TEXT, replace:FROM:TO, digits, phone, '
 			. 'phone_intl, date:FORMAT, join:SEP, first, grams, prefix:TEXT, suffix:TEXT';
@@ -325,6 +325,28 @@ final class SettingsTab {
 					'skip'    => __( 'Skipped', 'woo-courier-export' ),
 				),
 				'default' => $defaults['invalid_phone'],
+			),
+			array(
+				'type'    => 'select',
+				'id'      => self::id( 'duplicate_orders' ),
+				'title'   => __( 'Orders for the same recipient', 'woo-courier-export' ),
+				'desc'    => __( 'When several selected orders go to the same customer (repeat clicks, test or fake orders), later ones are...', 'woo-courier-export' ),
+				'options' => array(
+					'warn'  => __( 'Exported, and all of them flagged with a warning', 'woo-courier-export' ),
+					'skip'  => __( 'Skipped; only the first order is exported', 'woo-courier-export' ),
+					'allow' => __( 'Exported without a warning', 'woo-courier-export' ),
+				),
+				'default' => $defaults['duplicate_orders'],
+			),
+			array(
+				'type'    => 'select',
+				'id'      => self::id( 'duplicate_match' ),
+				'title'   => __( 'Same recipient means', 'woo-courier-export' ),
+				'options' => array(
+					'phone'         => __( 'Same phone number', 'woo-courier-export' ),
+					'phone_address' => __( 'Same phone number and delivery address', 'woo-courier-export' ),
+				),
+				'default' => $defaults['duplicate_match'],
 			),
 			array(
 				'type'    => 'checkbox',

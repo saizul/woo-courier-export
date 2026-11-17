@@ -57,6 +57,14 @@ final class ExportResult {
 	public $warnings = array();
 
 	/**
+	 * Duplicate order id => id of the first order in this export that goes to
+	 * the same recipient.
+	 *
+	 * @var array<int,int>
+	 */
+	public $duplicates = array();
+
+	/**
 	 * Sum of the COD amounts exported.
 	 *
 	 * @var float
@@ -70,7 +78,27 @@ final class ExportResult {
 	 * @param string $code     Warning code.
 	 */
 	public function warn( int $order_id, string $code ): void {
-		$this->warnings[ $order_id ][] = $code;
+		if ( ! in_array( $code, $this->warnings[ $order_id ] ?? array(), true ) ) {
+			$this->warnings[ $order_id ][] = $code;
+		}
+	}
+
+	/**
+	 * Groups of order ids that go to the same recipient, each starting with the
+	 * first order of the group.
+	 *
+	 * @return array<int,int[]>
+	 */
+	public function duplicate_groups(): array {
+		$groups = array();
+		foreach ( $this->duplicates as $id => $first ) {
+			if ( ! isset( $groups[ $first ] ) ) {
+				$groups[ $first ] = array( $first );
+			}
+			$groups[ $first ][] = $id;
+		}
+
+		return array_values( $groups );
 	}
 
 	/**

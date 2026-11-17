@@ -42,6 +42,8 @@ final class SettingsSchema {
 			'default_item_weight'  => 0.5,
 			'minimum_weight'       => 0.5,
 			'invalid_phone'        => ExportOptions::INVALID_PHONE_INCLUDE,
+			'duplicate_orders'     => ExportOptions::DUPLICATES_WARN,
+			'duplicate_match'      => ExportOptions::DUPLICATE_MATCH_PHONE,
 			'skip_exported'        => false,
 			'mark_exported'        => true,
 			'add_order_note'       => true,
@@ -104,6 +106,9 @@ final class SettingsSchema {
 		$out['cod_rounding']   = self::choice( $raw, 'cod_rounding', array( CodCalculator::ROUND_ROUND, CodCalculator::ROUND_CEIL, CodCalculator::ROUND_FLOOR, CodCalculator::ROUND_NONE ) );
 		$out['invalid_phone']  = self::choice( $raw, 'invalid_phone', array( ExportOptions::INVALID_PHONE_INCLUDE, ExportOptions::INVALID_PHONE_SKIP ) );
 		$out['delimiter']      = self::choice( $raw, 'delimiter', array( ',', ';', 'tab', '|' ) );
+
+		$out['duplicate_orders'] = self::choice( $raw, 'duplicate_orders', array( ExportOptions::DUPLICATES_WARN, ExportOptions::DUPLICATES_SKIP, ExportOptions::DUPLICATES_ALLOW ) );
+		$out['duplicate_match']  = self::choice( $raw, 'duplicate_match', array( ExportOptions::DUPLICATE_MATCH_PHONE, ExportOptions::DUPLICATE_MATCH_PHONE_ADDRESS ) );
 
 		$meta_key             = self::text( $raw['paid_meta_key'] ?? '' );
 		$out['paid_meta_key'] = preg_match( '/^[A-Za-z0-9_\-]{0,191}$/', $meta_key ) ? $meta_key : '';

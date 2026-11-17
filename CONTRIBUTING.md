@@ -57,5 +57,11 @@ PHP 7.4 or newer is required. The dependencies are resolved for PHP 7.4
 2. Tag `vX.Y.Z` and publish a GitHub release. The `Release zip` workflow checks the
    versions and attaches `woo-courier-export.zip`.
 
+## Code of conduct
+
+Everyone taking part in this project is expected to follow the
+[Code of Conduct](CODE_OF_CONDUCT.md). Please report unacceptable behaviour as
+described there.
+
 By contributing you agree that your contribution is licensed under the
 GPL-2.0-or-later license of this project.

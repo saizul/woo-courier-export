@@ -80,6 +80,29 @@ final class ExportCommandTest extends WpTestCase {
 		$this->command()->export( array( 'nope' ), array() );
 	}
 
+	public function test_duplicates_follow_the_setting_and_the_flag(): void {
+		$this->order();
+		$this->order( array( 'id' => 502, 'number' => 'WC-502' ) );
+
+		$this->command()->export( array( 'steadfast' ), array( 'ids' => '501,502', 'dry-run' => true ) );
+		$this->assertSame( array( 'Order 501: duplicate', 'Order 502: duplicate' ), $this->messages( 'warning' ) );
+
+		WP_CLI::reset();
+		$this->command( array( 'duplicate_orders' => 'allow' ) )->export( array( 'steadfast' ), array( 'ids' => '501,502', 'dry-run' => true, 'duplicates' => 'skip' ) );
+		$this->assertSame( array( 'Order 502 skipped: duplicate (same recipient as order 501)' ), $this->messages( 'warning' ) );
+		$this->assertStringContainsString( '1 order(s) exported, 1 skipped', $this->messages( 'success' )[0] );
+
+		WP_CLI::reset();
+		$this->command( array( 'duplicate_orders' => 'skip' ) )->export( array( 'steadfast' ), array( 'ids' => '501,502', 'dry-run' => true, 'duplicates' => 'allow' ) );
+		$this->assertSame( array(), $this->messages( 'warning' ) );
+	}
+
+	public function test_unknown_duplicates_value(): void {
+		$this->order();
+		$this->expectException( WpCliExit::class );
+		$this->command()->export( array( 'steadfast' ), array( 'ids' => '501', 'duplicates' => 'merge' ) );
+	}
+
 	public function test_invalid_date(): void {
 		$this->expectException( WpCliExit::class );
 		$this->command()->export( array( 'redx' ), array( 'after' => 'yesterday' ) );

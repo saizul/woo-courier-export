@@ -23,7 +23,9 @@ final class Exporter {
 	public const SKIP_INVALID_PHONE = 'invalid_phone';
 	public const SKIP_EXPORTED      = 'already_exported';
 	public const SKIP_FILTERED      = 'filtered';
+	public const SKIP_DUPLICATE     = 'duplicate';
 
+	public const WARN_DUPLICATE       = 'duplicate';
 	public const WARN_INVALID_PHONE   = 'invalid_phone';
 	public const WARN_MISSING_ADDRESS = 'missing_address';
 	public const WARN_MISSING_NAME    = 'missing_name';
@@ -76,6 +78,7 @@ final class Exporter {
 		$result          = new ExportResult();
 		$result->format  = $format->id();
 		$result->headers = $format->headers();
+		$seen            = array();
 
 		foreach ( $orders as $order ) {
 			if ( $options->skip_exported && ! empty( $order->meta['_woo_courier_export_exported'] ) ) {
@@ -96,6 +99,29 @@ final class Exporter {
 				}
 				$result->warn( $order->id, self::WARN_INVALID_PHONE );
 			}
+
+			$context['recipient']['duplicate_of'] = '';
+			$key                                  = $this->duplicate_key( $order, $context, $format->id(), $options );
+			if ( '' !== $key && isset( $seen[ $key ] ) ) {
+				$first = $seen[ $key ];
+				if ( ExportOptions::DUPLICATES_SKIP === $options->duplicates ) {
+					$result->skipped[ $order->id ]    = self::SKIP_DUPLICATE;
+					$result->duplicates[ $order->id ] = $first['id'];
+					continue;
+				}
+				$result->duplicates[ $order->id ]     = $first['id'];
+				$context['recipient']['duplicate_of'] = $first['number'];
+				if ( ExportOptions::DUPLICATES_WARN === $options->duplicates ) {
+					$result->warn( $first['id'], self::WARN_DUPLICATE );
+					$result->warn( $order->id, self::WARN_DUPLICATE );
+				}
+			} elseif ( '' !== $key ) {
+				$seen[ $key ] = array(
+					'id'     => $order->id,
+					'number' => '' !== (string) $order->number ? (string) $order->number : (string) $order->id,
+				);
+			}
+
 			if ( '' === trim( (string) $context['recipient']['name'] ) ) {
 				$result->warn( $order->id, self::WARN_MISSING_NAME );
 			}
@@ -121,5 +147,21 @@ final class Exporter {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Duplicate detection key for an order, or '' to leave it out of the check.
+	 *
+	 * @param OrderData           $order   Order.
+	 * @param array<string,mixed> $context Template context.
+	 * @param string              $format  Format id.
+	 * @param ExportOptions       $options Options.
+	 */
+	private function duplicate_key( OrderData $order, array $context, string $format, ExportOptions $options ): string {
+		// Computed in "allow" mode too, so {recipient.duplicate_of} still works.
+		$key = RecipientKey::from_context( $context, $options->duplicate_match );
+		$key = $this->hooks->filter( 'woo_courier_export_duplicate_key', $key, $order, $context, $format );
+
+		return is_scalar( $key ) ? (string) $key : '';
 	}
 }

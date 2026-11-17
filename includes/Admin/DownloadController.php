@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Saizul\CourierExport\WP\Admin;
 
+use Saizul\CourierExport\Export\Exporter;
 use Saizul\CourierExport\WP\ExportService;
 use Saizul\CourierExport\WP\Plugin;
 
@@ -85,7 +86,7 @@ final class DownloadController {
 
 		$orders = $this->service->load_orders( (array) $job['ids'] );
 		$result = $this->service->export( $orders, $format );
-		$this->remember_summary( $result->count(), $result->skipped, $result->warnings );
+		$this->remember_summary( $result->count(), $result->skipped, $result->warnings, $result->duplicates );
 
 		$this->send( $this->service->filename( $format ), $result->headers, $result->rows );
 	}
@@ -116,15 +117,17 @@ final class DownloadController {
 	 *
 	 * @param int                 $count    Exported rows.
 	 * @param array<int,string>   $skipped  Skipped orders.
-	 * @param array<int,string[]> $warnings Warnings per order.
+	 * @param array<int,string[]> $warnings   Warnings per order.
+	 * @param array<int,int>      $duplicates Duplicate order id => first order id.
 	 */
-	private function remember_summary( int $count, array $skipped, array $warnings ): void {
+	private function remember_summary( int $count, array $skipped, array $warnings, array $duplicates = array() ): void {
 		set_transient(
 			self::NOTICE_PREFIX . get_current_user_id(),
 			array(
-				'count'    => $count,
-				'skipped'  => $skipped,
-				'warnings' => $warnings,
+				'count'      => $count,
+				'skipped'    => $skipped,
+				'warnings'   => $warnings,
+				'duplicates' => $duplicates,
 			),
 			300
 		);
@@ -144,9 +147,19 @@ final class DownloadController {
 		}
 		delete_transient( $key );
 
-		$labels = ExportService::reason_labels();
-		$lines  = array();
+		$labels     = ExportService::reason_labels();
+		$duplicates = isset( $summary['duplicates'] ) ? (array) $summary['duplicates'] : array();
+		$lines      = array();
 		foreach ( (array) $summary['skipped'] as $id => $reason ) {
+			if ( Exporter::SKIP_DUPLICATE === $reason && isset( $duplicates[ $id ] ) ) {
+				$lines[] = sprintf(
+					/* translators: 1: order id, 2: id of the earlier order for the same recipient. */
+					__( 'Order #%1$d skipped: same recipient as order #%2$d.', 'woo-courier-export' ),
+					$id,
+					(int) $duplicates[ $id ]
+				);
+				continue;
+			}
 			$lines[] = sprintf(
 				/* translators: 1: order id, 2: reason. */
 				__( 'Order #%1$d skipped: %2$s.', 'woo-courier-export' ),
